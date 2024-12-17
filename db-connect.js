@@ -1,13 +1,15 @@
 const { Sequelize, DataTypes } = require('sequelize');
+require('dotenv').config();
 
 // Initialize Sequelize
-const sequelize = new Sequelize('account', 'root', 'trung113', {
-  host: 'localhost',
+const sequelize = new Sequelize(process.env.DBName, process.env.DBUser, process.env.DBPass, {
+  host: process.env.DBHost,
   dialect: 'mysql',
 });
 
 // Define BusinessManager model
 const BusinessManager = sequelize.define('BusinessManager', {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   name: { type: DataTypes.STRING, allowNull: false },
   image: { type: DataTypes.STRING },
   email: { type: DataTypes.STRING, allowNull: false, unique: true },
@@ -19,6 +21,7 @@ const BusinessManager = sequelize.define('BusinessManager', {
 
 // Define Candidate model
 const Candidate = sequelize.define('Candidate', {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   name: { type: DataTypes.STRING, allowNull: false },
   image: { type: DataTypes.STRING },
   email: { type: DataTypes.STRING, allowNull: false, unique: true },
@@ -40,6 +43,20 @@ async function fetchBusinessManagers() {
   }
 }
 
+// Fetch all Business Managers
+async function fetchBusinessManagersbyIDs(ids) {
+  try {
+    const businessManagers = await BusinessManager.findAll({
+      where: {
+      id: ids
+      }
+    });
+    return businessManagers;
+} catch (error) {
+    console.error('Error fetching Business Managers:', error);
+  }
+}
+
 // Fetch all Candidates
 async function fetchCandidates() {
   try {
@@ -50,4 +67,4 @@ async function fetchCandidates() {
   }
 }
 
-module.exports = { fetchBusinessManagers, fetchCandidates };
+module.exports = { fetchBusinessManagers, fetchCandidates, fetchBusinessManagersbyIDs};
