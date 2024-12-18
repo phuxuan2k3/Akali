@@ -1,8 +1,12 @@
 const express = require('express');
-const { fetchBusinessManagers, fetchCandidates, fetchBusinessManagersbyIDs } = require('./db-connect');
+const { init, fetchBusinessManagers, fetchCandidates, fetchBusinessManagersbyIDs } = require('./db-connect');
 require('dotenv').config();
 const app = express();
 app.use(express.json());
+
+
+init();
+//Init function is called to create the tables in the database
 
 app.get('/businessManagers', async (req, res) => {
     res.send(await fetchBusinessManagers())

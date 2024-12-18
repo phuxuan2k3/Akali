@@ -7,6 +7,10 @@ const sequelize = new Sequelize(process.env.DBName, process.env.DBUser, process.
   dialect: 'mysql',
 });
 
+const init = async () => {
+await sequelize.sync({ force: true });
+}
+
 // Define BusinessManager model
 const BusinessManager = sequelize.define('BusinessManager', {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -67,4 +71,4 @@ async function fetchCandidates() {
   }
 }
 
-module.exports = { fetchBusinessManagers, fetchCandidates, fetchBusinessManagersbyIDs};
+module.exports = { init, fetchBusinessManagers, fetchCandidates, fetchBusinessManagersbyIDs};
