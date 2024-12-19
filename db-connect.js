@@ -7,10 +7,6 @@ const sequelize = new Sequelize(process.env.DBName, process.env.DBUser, process.
   dialect: 'mysql',
 });
 
-const init = async () => {
-await sequelize.sync({ force: true });
-}
-
 // Define BusinessManager model
 const BusinessManager = sequelize.define('BusinessManager', {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -37,6 +33,11 @@ const Candidate = sequelize.define('Candidate', {
   timestamps: false,
 });
 
+// Initialize database
+(async () => {
+  await sequelize.sync({ force: true });
+})();
+
 // Fetch all Business Managers
 async function fetchBusinessManagers() {
   try {
@@ -52,11 +53,11 @@ async function fetchBusinessManagersbyIDs(ids) {
   try {
     const businessManagers = await BusinessManager.findAll({
       where: {
-      id: ids
+        id: ids
       }
     });
     return businessManagers;
-} catch (error) {
+  } catch (error) {
     console.error('Error fetching Business Managers:', error);
   }
 }
@@ -71,4 +72,4 @@ async function fetchCandidates() {
   }
 }
 
-module.exports = { init, fetchBusinessManagers, fetchCandidates, fetchBusinessManagersbyIDs};
+module.exports = { fetchBusinessManagers, fetchCandidates, fetchBusinessManagersbyIDs };
