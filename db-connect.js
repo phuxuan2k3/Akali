@@ -35,7 +35,7 @@ const Candidate = sequelize.define('Candidate', {
 
 // Initialize database
 (async () => {
-  await sequelize.sync({ force: true });
+  await sequelize.sync({ force: false });
 })();
 
 // Fetch all Business Managers
